@@ -1,0 +1,37 @@
+# Multi Level Monte Carlo
+
+- What is the goal of the project?
+- What is this project?
+- How does it work?
+- Who will benefit from this project?
+
+## TO-DOs
+-[x] Project setup
+-[x] Build system
+-[ ] Fill Readme file
+-[ ] Add a license file
+-[ ] Will we be open to contributions? Add a contributing file
+
+### Random Numbers Generator
+-[ ] Create a header file rng.h
+-[ ] Separate each rng implementation into its own file
+-[ ] Add a timing implementation to test the different rng available
+
+### Test Suite
+-[ ] 
+
+### Report, Plots, & Logging
+-[ ] Create a logger.h library to manage all logging calls
+-[ ] Find a convention for text output
+-[ ] Generate pdfs and tex files dynamically
+-[ ] Port matlab plotting code to C
+
+### Utilities
+-[ ] Move regression function to a util.h file
+
+### Applications
+-[ ] Separate poissinv file into a proper header and cpp file
+-[ ] Remove rng embbeded code and use the rng.h instead
+-[ ] Other Matlab applications to port?
+-[ ] Add OMP support to the other applicaciones? ctmp runs the slowest
+
