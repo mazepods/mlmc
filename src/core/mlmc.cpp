@@ -120,18 +120,12 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
         suml[2][l] += sums[2];
         NlCl[l]    += sums[0];  // sum total cost
       }
-    }
-    if (diag) printf(" \n");
 
-    //
-    // compute absolute average, variance and cost,
-    // correct for possible under-sampling,
-    // and set optimal number of new samples
-    //
+      //
+      // compute absolute average, variance and cost,
+      // correct for possible under-sampling
+      //
 
-    //sum = 0.0f;
-
-    for (int l=0; l<=L; l++) {
       ml[l] = fabs(suml[1][l]/suml[0][l]);
       Vl[l] = fmaxf(suml[2][l]/suml[0][l] - ml[l]*ml[l], 0.0f);
       if (gamma_0 <= 0.0f) Cl[l] = NlCl[l] / suml[0][l];
@@ -141,6 +135,12 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
         Vl[l] = fmaxf(Vl[l],  0.5f*Vl[l-1]/powf(2.0f,beta));
       }
     }
+
+    if (diag) printf(" \n");
+
+    //
+    // set optimal number of new samples
+    //
 
     update_samples(L, dNl, Vl, Cl, eps, theta, suml[0]);
  
