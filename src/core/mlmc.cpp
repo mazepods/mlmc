@@ -39,6 +39,7 @@
 
 void regression(int, float *, float *, float &a, float &b);
 float estimate(int L, float *z, int type, float min =0.0f);
+void update_samples(int L, int *dNl, float *Vl, float *Cl, float eps, float theta, double *Nl);
 
 float mlmc(int Lmin, int Lmax, int N0, float eps,
            void (*mlmc_l)(int, int, double *),
@@ -128,7 +129,7 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
     // and set optimal number of new samples
     //
 
-    sum = 0.0f;
+    //sum = 0.0f;
 
     for (int l=0; l<=L; l++) {
       ml[l] = fabs(suml[1][l]/suml[0][l]);
@@ -139,15 +140,9 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
         ml[l] = fmaxf(ml[l],  0.5f*ml[l-1]/powf(2.0f,alpha));
         Vl[l] = fmaxf(Vl[l],  0.5f*Vl[l-1]/powf(2.0f,beta));
       }
-
-      sum += sqrtf(Vl[l]*Cl[l]);
     }
 
-    for (int l=0; l<=L; l++) {
-      dNl[l] = ceilf( fmaxf( 0.0f, 
-                       sqrtf(Vl[l]/Cl[l])*sum/((1.0f-theta)*eps*eps)
-                     - suml[0][l] ) );
-    }
+    update_samples(L, dNl, Vl, Cl, eps, theta, suml[0]);
  
     //
     // use linear regression to estimate alpha, beta, gamma if not given
@@ -174,8 +169,8 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
     //
 
     sum = 0.0;
-      for (int l=0; l<=L; l++)
-        sum += fmaxf(0.0f, (float)dNl[l]-0.01f*suml[0][l]);
+    for (int l=0; l<=L; l++)
+      sum += fmaxf(0.0f, (float)dNl[l]-0.01f*suml[0][l]);
 
     if (sum==0) {
       if (diag) printf(" achieved variance target \n");
@@ -194,12 +189,7 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
 
           if (diag) printf(" L = %d \n",L);
 
-          sum = 0.0f;
-          for (int l=0; l<=L; l++) sum += sqrtf(Vl[l]*Cl[l]);
-          for (int l=0; l<=L; l++)
-            dNl[l] = ceilf( fmaxf( 0.0f, 
-                            sqrtf(Vl[l]/Cl[l])*sum/((1.0f-theta)*eps*eps)
-                          - suml[0][l] ) );
+          update_samples(L, dNl, Vl, Cl, eps, theta, suml[0]);
         }
       }
     }
@@ -258,4 +248,15 @@ float estimate(int L, float *z, int type, float min) {
   }
   regression(L,x,y,var,sum);
   return fmax(var,min);
+}
+
+//
+// gives the number of additional samples which will need to be generated in the next pass 
+//
+
+void update_samples(int L, int *dNl, float *Vl, float *Cl, float eps, float theta, double *Nl) {
+  float sum = 0.0f;
+  for (int l=0; l<=L; l++) sum += sqrtf(Vl[l]*Cl[l]);
+  for (int l=0; l<=L; l++)
+  dNl[l] = ceilf(fmaxf(0.0f, sqrtf(Vl[l]/Cl[l])*sum/((1.0f-theta)*eps*eps)-Nl[l]));
 }
