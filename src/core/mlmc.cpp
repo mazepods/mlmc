@@ -33,15 +33,20 @@
 #include <math.h>
 #include <stdio.h>
 
+#define ALPHA 0
+#define BETA 1
+#define GAMMA 2
+
 void regression(int, float *, float *, float &a, float &b);
+float estimate(int L, float *z, int type, float min =0.0f);
 
 float mlmc(int Lmin, int Lmax, int N0, float eps,
            void (*mlmc_l)(int, int, double *),
-           float alpha_0, float beta_0, float gamma_0,
-           int *Nl, float *Cl) {
+           int *Nl, float *Cl,
+           float alpha_0 = 0.0f, float beta_0 = 0.0f, float gamma_0 = 0.0f) {
 
   double sums[7], suml[3][21];
-  float  ml[21], Vl[21], NlCl[21], x[21], y[21],
+  float  ml[21], Vl[21], NlCl[21],
          alpha, beta, gamma, sum, theta;
   int    dNl[21], L, converged;
 
@@ -143,35 +148,17 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
     //
 
     if (alpha_0 <= 0.0f) {
-      for (int l=1; l<=L; l++) {
-        x[l-1] = l;
-        y[l-1] = - log2f(ml[l]);
-      }
-      regression(L,x,y,alpha,sum);
-      alpha = fmax(alpha,0.5f);
-      
+      alpha = estimate(L,ml,ALPHA,0.5f);
       if (diag) printf(" alpha = %f \n",alpha);
     }
 
     if (beta_0 <= 0.0f) {
-      for (int l=1; l<=L; l++) {
-        x[l-1] = l;
-        y[l-1] = - log2f(Vl[l]);
-      }
-      regression(L,x,y,beta,sum);
-      beta = fmax(beta,0.5f);
-
+      beta = estimate(L,Vl,BETA,0.5f);
       if (diag) printf(" beta = %f \n",beta);
     }
 
      if (gamma_0 <= 0.0f) {
-      for (int l=1; l<=L; l++) {
-        x[l-1] = l;
-        y[l-1] = log2f(Cl[l]);
-      }
-      regression(L,x,y,gamma,sum);
-      gamma = fmax(gamma,0.5f);
-
+      gamma = estimate(L,Cl,GAMMA,0.5f);
       if (diag) printf(" gamma = %f \n",gamma);
     }
 
@@ -226,7 +213,6 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
   return P;
 }
 
-
 //
 // linear regression routine
 //
@@ -246,4 +232,24 @@ void regression(int N, float *x, float *y, float &a, float &b){
 
   a = (sum0*sumy1 - sum1*sumy0) / (sum0*sum2 - sum1*sum1);
   b = (sum2*sumy0 - sum1*sumy1) / (sum0*sum2 - sum1*sum1);
+}
+
+//
+// use linear regression routine to estimate alpha, beta, gamma
+//
+
+float estimate(int L, float *z, int type, float min) {
+  float var, sum;
+  int a = 1;
+  float *x = (float *)malloc((L+1)*sizeof(float));
+  float *y = (float *)malloc((L+1)*sizeof(float));
+
+  if (type == GAMMA) a = -1;
+
+  for (int l=1; l<=L; l++) {
+    x[l-1] = l;
+    y[l-1] = a * log2f(x[l]);
+  }
+  regression(L,x,y,var,sum);
+  return fmax(var,min);
 }

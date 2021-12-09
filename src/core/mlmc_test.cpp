@@ -176,7 +176,7 @@ void mlmc_test(void (*mlmc_l)(int, int, double *), int N,int L,
   while (Eps[i]>0) {
     float eps = Eps[i++];
 
-    float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l, alpha,beta,gamma, Nl,Cl);
+    float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l,Nl,Cl,alpha,beta,gamma) ;
 
     float std_cost = 0.0f, mlmc_cost = 0.0f, theta=0.25f;
 

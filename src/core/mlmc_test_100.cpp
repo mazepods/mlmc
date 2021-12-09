@@ -70,7 +70,7 @@ void mlmc_test_100(void (*mlmc_l)(int, int, double *), float val,
     PRINTF2(fp,"\n eps = %.3e \n-----------------\n",eps); 
 
     for(int j=0; j<100; j++) {
-      float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l, 0.0f,0.0f,0.0f, Nl,Cl);
+      float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l,Nl,Cl);
       PRINTF2(fp," %.5e ",P);
       if (j%5==4) PRINTF2(fp,"\n");
     }
