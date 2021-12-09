@@ -45,12 +45,18 @@ float mlmc(int Lmin, int Lmax, int N0, float eps,
            int *Nl, float *Cl,
            float alpha_0 = 0.0f, float beta_0 = 0.0f, float gamma_0 = 0.0f) {
 
-  double sums[7], suml[3][21];
-  float  ml[21], Vl[21], NlCl[21],
-         alpha, beta, gamma, sum, theta;
-  int    dNl[21], L, converged;
+  double sums[7];
+  double *suml[3];
+  for (int i=0; i<3; i++) suml[i] = (double *)malloc((Lmax+1)*sizeof(double));
 
-  int    diag = 0;  // diagnostics, set to 0 for none 
+  float *ml   = (float *)malloc((Lmax+1)*sizeof(float)),
+        *Vl   = (float *)malloc((Lmax+1)*sizeof(float)),
+        *NlCl = (float *)malloc((Lmax+1)*sizeof(float));
+  float alpha, beta, gamma, sum, theta;
+  int   *dNl = (int *)malloc((Lmax+1)*sizeof(int));
+  int   L, converged;
+
+  int   diag = 0;  // diagnostics, set to 0 for none
 
   //
   // check input parameters
