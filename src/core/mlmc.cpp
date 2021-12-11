@@ -196,15 +196,15 @@ void regression(int N, float *x, float *y, float &a, float &b){
 
 float estimate(int L, float *z, int type, float min) {
   float var, sum;
-  int a = 1;
+  int a = -1;
   float *x = (float *)malloc((L+1)*sizeof(float));
   float *y = (float *)malloc((L+1)*sizeof(float));
 
-  if (type == GAMMA) a = -1;
+  if (type == GAMMA) a = 1;
 
   for (int l=1; l<=L; l++) {
     x[l-1] = l;
-    y[l-1] = a * log2f(fabsf(x[l]));
+    y[l-1] = a * log2f(fabsf(z[l]));
   }
   regression(L,x,y,var,sum);
   return fmax(var,min);
