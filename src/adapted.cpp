@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   sprintf(filename,"adapted.txt");
   fp = fopen(filename,"w");
 
-  mlmc_test(adapted_l, N,L, N0,Eps, Lmin,Lmax, fp);
+  mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
 
   fclose(fp);
     
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 //  level l multiple thread OpenMP estimator
 //
 
-void adapted_l(int l, int N, double *sums) {
+void mlmc_l(int l, int N, double *sums) {
 
   for (int k=0; k<7; k++) sums[k] = 0.0;
 

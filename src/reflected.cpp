@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
       printf("\n ---- option %d: penalisation scheme ----\n",option);
     }
     
-    mlmc_test(reflected_l, N,L, N0,Eps, Lmin,Lmax, fp);
+    mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
 
     fclose(fp);
     
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 //  level l multiple thread OpenMP estimator
 //
 
-void reflected_l(int l, int N, double *sums) {
+void mlmc_l(int l, int N, double *sums) {
 
   for (int k=0; k<7; k++) sums[k] = 0.0;
 

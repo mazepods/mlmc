@@ -47,28 +47,29 @@ $(OBJDIR)/mt/%.o: %.cpp
 	$(CCOMP) $(COMPFLAGS) -c $< -o $@ $(INC) $(LIB)
 
 mcqmc06: $(OBJDIR)/st/mcqmc06.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 mcqmc06_omp: $(OBJDIR)/mt/mcqmc06.o $(MTOBJS)
-	$(CCOMP) $(COMPFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 ctmp: $(OBJDIR)/st/ctmp.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 nested: $(OBJDIR)/st/nested.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 adapted: $(OBJDIR)/st/adapted.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 reflected: $(OBJDIR)/st/reflected.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 	
 timing: $(OBJDIR)/st/timing.o $(STOBJS)
 	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 timing_omp: $(OBJDIR)/mt/timing_omp.o $(MTOBJS)
 	$(CCOMP) $(COMPFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
 clean:
 	$(RM) -rf $(BINDIR)/* $(OBJDIR)/*
 	mkdir -p $(OBJDIR)/st

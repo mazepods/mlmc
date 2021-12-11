@@ -34,15 +34,14 @@
 #include <time.h>
 #include <string.h>
 
-#include <mlmc.cpp>
+#include "mlmc.h"
 
 // https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
 // variadic macro to print to both file and stdout
 #define PRINTF2(fp, ...) {printf(__VA_ARGS__);fprintf(fp,__VA_ARGS__);}
 
 
-void mlmc_test(void (*mlmc_l)(int, int, double *), int N,int L,
-               int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
+void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
 
 //
 // first, convergence tests
@@ -176,7 +175,7 @@ void mlmc_test(void (*mlmc_l)(int, int, double *), int N,int L,
   while (Eps[i]>0) {
     float eps = Eps[i++];
 
-    float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l,Nl,Cl,alpha,beta,gamma) ;
+    float P = mlmc(Lmin,Lmax,N0,eps,Nl,Cl,alpha,beta,gamma) ;
 
     float std_cost = 0.0f, mlmc_cost = 0.0f, theta=0.25f;
 

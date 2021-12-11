@@ -24,8 +24,6 @@
 
 int option;  // parameter to specify the financial option
 
-void mcqmc06_l(int, int, double *);
-
 float ncff(float x){
   return 0.5f+0.5f*erff(sqrtf(0.5f)*x);
 }
@@ -98,7 +96,7 @@ int main(int argc, char **argv) {
       memcpy(Eps,Eps2,sizeof(Eps2));
     }
 
-    mlmc_test(mcqmc06_l, N,L, N0,Eps, Lmin,Lmax, fp);
+    mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
 
     fclose(fp);
 
@@ -156,7 +154,7 @@ int main(int argc, char **argv) {
 
     sprintf(filename,"mcqmc06_%d_100.txt",option);
     fp = fopen(filename,"w");
-    mlmc_test_100(mcqmc06_l, val, N0,Eps,Lmin,Lmax, fp);
+    mlmc_test_100(val, N0,Eps,Lmin,Lmax, fp);
 
     fclose(fp);
     
@@ -180,7 +178,7 @@ int main(int argc, char **argv) {
 %
 */
 
-void mcqmc06_l(int l, int N, double *sums) {
+void mlmc_l(int l, int N, double *sums) {
 
   // variables declared here are shared by all OpenMP threads
   int   nf, nc;

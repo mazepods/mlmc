@@ -35,8 +35,7 @@
 #define PRINTF2(fp, ...) {printf(__VA_ARGS__);fprintf(fp,__VA_ARGS__);}
 
 
-void mlmc_test_100(void (*mlmc_l)(int, int, double *), float val,
-                   int N0, float *Eps, int Lmin, int Lmax, FILE *fp){
+void mlmc_test_100(float val, int N0, float *Eps, int Lmin, int Lmax, FILE *fp){
 
   // current date/time based on current system
   time_t now = time(NULL);
@@ -70,7 +69,7 @@ void mlmc_test_100(void (*mlmc_l)(int, int, double *), float val,
     PRINTF2(fp,"\n eps = %.3e \n-----------------\n",eps); 
 
     for(int j=0; j<100; j++) {
-      float P = mlmc(Lmin,Lmax,N0,eps,mlmc_l,Nl,Cl);
+      float P = mlmc(Lmin,Lmax,N0,eps,Nl,Cl);
       PRINTF2(fp," %.5e ",P);
       if (j%5==4) PRINTF2(fp,"\n");
     }

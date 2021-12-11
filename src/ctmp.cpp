@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
   uniform.reset();
 
   fp = fopen("ctmp.txt","w");
-  mlmc_test(ctmp_l, N,L, N0,Eps, Lmin,Lmax, fp);
+  mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
   fclose(fp);
   
 //
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   /*
   float val = 0.0;
   fp = fopen("ctmp_100.txt","w");
-  mlmc_test_100(mcqmc06_l, val, N0,Eps,Lmin,Lmax, fp);
+  mlmc_test_100(val, N0,Eps,Lmin,Lmax, fp);
   fclose(fp);
   */
 }
@@ -75,7 +75,7 @@ void propensity(float *q, float *lam){
 }
 
 
-void ctmp_l(int l, int N, double *sums) {
+void mlmc_l(int l, int N, double *sums) {
 
   float u, p1, p2;
   int   n_states=3, n_reactions=5;

@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   normal.reset();
 
   fp = fopen("nested.txt","w");
-  mlmc_test(nested_l, N,L, N0,Eps, Lmin,Lmax, fp);
+  mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
   fclose(fp);
   
 //
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 */
 
 
-void nested_l(int l, int N, double *sums) {
+void mlmc_l(int l, int N, double *sums) {
 
   float Pf, Pc, dP, X, Y, f2;
 
