@@ -53,7 +53,7 @@ mcqmc06_omp: $(OBJDIR)/mt/mcqmc06.o $(MTOBJS)
 	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 ctmp: $(OBJDIR)/st/ctmp.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $(OBJDIR)/st/poissinv.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 nested: $(OBJDIR)/st/nested.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
