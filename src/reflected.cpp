@@ -69,7 +69,8 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 12;     // maximum refinement level
  
-  float Eps[11] = { 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.0 };
+  float Eps[] = { 0.0002, 0.0005, 0.001, 0.002, 0.005 };
+  int size_eps = NELEMS(Eps);
   char filename[32];
   FILE *fp;
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv) {
       printf("\n ---- option %d: penalisation scheme ----\n",option);
     }
     
-    complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
+    complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
 
     fclose(fp);
     
@@ -131,14 +132,7 @@ void mlmc_l(int l, int N, double *sums) {
 #pragma omp parallel for reduction(+:sums[0:7])
     for (int n2=0; n2<N; n2++) {
       double v[3], xf[3],xc[3], dW[3],dWf[3],dWc[3];
-
-      int   nrng = 0;
-      
-      double T  = 1.0;
-      double t  = 0.0;
-      double tf = 0.0;
-      double tc = 0.0;
-
+int   nrng = 0; double T  = 1.0; double t  = 0.0; double tf = 0.0; double tc = 0.0; 
       double hf = 0.0;
       double hc = 0.0;
 

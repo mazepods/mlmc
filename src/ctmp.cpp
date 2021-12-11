@@ -31,7 +31,8 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 6;      // maximum refinement level
  
-  float Eps[] = { 1.0, 2.0, 5.0, 20.0, 0.0 };
+  float Eps[] = { 1.0, 2.0, 5.0, 20.0 };
+  int size_eps = NELEMS(Eps);
 
   FILE *fp;
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv) {
   uniform.reset();
 
   fp = fopen("ctmp.txt","w");
-  complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
+  complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
   fclose(fp);
   
 //

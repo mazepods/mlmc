@@ -2,7 +2,7 @@
 #include "mlmc.h"
 #include "mlmc_test.h"
 
-void complexity_test(int N, int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
+void complexity_test(int N, int L, int N0, float *Eps, int size_eps, int Lmin, int Lmax, FILE *fp) {
 
   //
   // first, convergence test
@@ -117,7 +117,7 @@ void complexity_test(int N, int L, int N0, float *Eps, int Lmin, int Lmax, FILE 
   int   *Nl = (int *)malloc((Lmax+1)*sizeof(int));
   float *Cl = (float *)malloc((Lmax+1)*sizeof(float));
 
-  while (Eps[i]>0) {
+  while (i<size_eps) {
     float eps = Eps[i++];
 
     float P = mlmc(Lmin,Lmax,N0,eps,Nl,Cl,alpha,beta,gamma) ;
@@ -144,7 +144,7 @@ void complexity_test(int N, int L, int N0, float *Eps, int Lmin, int Lmax, FILE 
   PRINTF2(fp,"\n");
 }
 
-void mlmc_test_n(float val, int n, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
+void mlmc_test_n(float val, int n, int N0, float *Eps, int size_eps, int Lmin, int Lmax, FILE *fp) {
   // current date/time based on current system
   time_t now = time(NULL);
   char *date = ctime(&now);
@@ -172,7 +172,7 @@ void mlmc_test_n(float val, int n, int N0, float *Eps, int Lmin, int Lmax, FILE 
   int   *Nl = (int *)malloc((Lmax+1)*sizeof(int));
   float *Cl = (float *)malloc((Lmax+1)*sizeof(float));
 
-  while (Eps[i]>0) {
+  while (i<size_eps) {
     float eps = Eps[i++];
     PRINTF2(fp,"\n eps = %.3e \n-----------------\n",eps); 
 

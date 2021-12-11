@@ -69,7 +69,8 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 10;     // maximum refinement level
  
-  float Eps[11] = { 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01, 0.0 };
+  float Eps[] = { 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01 };
+  int size_eps = NELEMS(Eps);
   char filename[32];
   FILE *fp;
 
@@ -84,7 +85,7 @@ int main(int argc, char **argv) {
   sprintf(filename,"adapted.txt");
   fp = fopen(filename,"w");
 
-  complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
+  complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
 
   fclose(fp);
     

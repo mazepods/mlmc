@@ -11,8 +11,10 @@
 // variadic macro to print to both file and stdout
 #define PRINTF2(fp, ...) {printf(__VA_ARGS__);fprintf(fp,__VA_ARGS__);}
 
-void complexity_test(int N, int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp);
+#define NELEMS(a) ((int)(sizeof(a)/sizeof(*a)))
 
-void mlmc_test_n(float val, int n, int N0, float *Eps, int Lmin, int Lmax, FILE *fp);
+void complexity_test(int N, int L, int N0, float *Eps, int size_eps, int Lmin, int Lmax, FILE *fp);
+
+void mlmc_test_n(float val, int n, int N0, float *Eps, int size_eps, int Lmin, int Lmax, FILE *fp);
 
 #endif

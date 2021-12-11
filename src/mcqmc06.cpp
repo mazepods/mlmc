@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
  
   int   N, L;
   float Eps[11];
+  int size_eps;
   char  filename[32];
   FILE *fp;
 
@@ -62,39 +63,44 @@ int main(int argc, char **argv) {
       printf("\n ---- option %d: European call ----\n",option);
       N      = 20000;    // samples for convergence tests
       L      = 8;        // levels for convergence tests 
-      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1, 0.0 };
+      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1 };
       memcpy(Eps,Eps2,sizeof(Eps2));
+      size_eps = NELEMS(Eps2);
     }
     else if (option==2) {
       printf("\n ---- option %d: Asian call ----\n",option);
       N      = 20000;    // samples for convergence tests
       L      = 8;        // levels for convergence tests 
-      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1, 0.0 };
+      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1 };
       memcpy(Eps,Eps2,sizeof(Eps2));
+      size_eps = NELEMS(Eps2);
     }
     else if (option==3) {
       printf("\n ---- option %d: lookback call ----\n",option);
       N      = 20000;    // samples for convergence tests
       L      = 10;       // levels for convergence tests 
-      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1, 0.0 };
+      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1 };
       memcpy(Eps,Eps2,sizeof(Eps2));
+      size_eps = NELEMS(Eps2);
     }
     else if (option==4) {
       printf("\n ---- option %d: digital call ----\n",option);
       N      = 200000;   // samples for convergence tests
       L      = 8;        // levels for convergence tests 
-      float Eps2[] = { 0.01, 0.02, 0.05, 0.1, 0.2, 0.0 };
+      float Eps2[] = { 0.01, 0.02, 0.05, 0.1, 0.2 };
       memcpy(Eps,Eps2,sizeof(Eps2));
+      size_eps = NELEMS(Eps2);
     }
     else if (option==5) {
       printf("\n ---- option %d: barrier call ----\n",option);
       N      = 200000;   // samples for convergence tests
       L      = 8;        // levels for convergence tests 
-      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1, 0.0 };
+      float Eps2[] = { 0.005, 0.01, 0.02, 0.05, 0.1 };
       memcpy(Eps,Eps2,sizeof(Eps2));
+      size_eps = NELEMS(Eps2);
     }
 
-    complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
+    complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
     fclose(fp);
 
     // print out time taken, if using OpenMP
@@ -151,7 +157,7 @@ int main(int argc, char **argv) {
 
     sprintf(filename,"mcqmc06_%d_100.txt",option);
     fp = fopen(filename,"w");
-    mlmc_test_n(val,100,N0,Eps,Lmin,Lmax,fp);
+    mlmc_test_n(val,100,N0,Eps,size_eps,Lmin,Lmax,fp);
 
     fclose(fp);
     
