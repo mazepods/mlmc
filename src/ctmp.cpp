@@ -10,8 +10,6 @@
 #include "mlmc_test.h"
 #include "poissinv.h"
 
-void ctmp_l(int, int, double *);
-
 // declare generator and output distribution
 
 std::default_random_engine rng;

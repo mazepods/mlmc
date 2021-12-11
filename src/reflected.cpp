@@ -19,8 +19,6 @@
 int D = 3;   // dimension
 int option;
 
-void reflected_l(int, int, double *);
-
 void drift_dt(double *x, double *v){
   double d = 0.0;
   for (int i=0; i<D; i++) d += x[i]*x[i];

@@ -19,8 +19,6 @@
 
 // some application-specific bits
 
-void adapted_l(int, int, double *);
-
 int D = 2;  // dimension
 
 //

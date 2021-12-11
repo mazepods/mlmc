@@ -8,8 +8,6 @@
 #include <random>           // C++11 random number generators
 #include <functional>
 
-void nested_l(int, int, double *);
-
 // declare generator and output distribution
 
 std::default_random_engine rng;
