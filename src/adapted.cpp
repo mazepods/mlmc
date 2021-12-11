@@ -10,8 +10,8 @@
 */
   
 
-#include "mlmc_test.cpp"  // master MLMC file
 #include "mlmc_rng.cpp"   // new file with RNG functions
+#include "mlmc_test.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   sprintf(filename,"adapted.txt");
   fp = fopen(filename,"w");
 
-  mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
+  complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
 
   fclose(fp);
     

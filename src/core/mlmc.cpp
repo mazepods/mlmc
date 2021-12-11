@@ -204,7 +204,7 @@ float estimate(int L, float *z, int type, float min) {
 
   for (int l=1; l<=L; l++) {
     x[l-1] = l;
-    y[l-1] = a * log2f(x[l]);
+    y[l-1] = a * log2f(fabsf(x[l]));
   }
   regression(L,x,y,var,sum);
   return fmax(var,min);

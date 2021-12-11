@@ -7,7 +7,7 @@
     small timesteps on finest levels
 */
 
-#include "mlmc_test.cpp"  // master MLMC file
+#include "mlmc_test.h"  // master MLMC file
 #include "mlmc_rng.cpp"   // new file with RNG functions
 
 #include <stdio.h>
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
       printf("\n ---- option %d: penalisation scheme ----\n",option);
     }
     
-    mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
+    complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
 
     fclose(fp);
     

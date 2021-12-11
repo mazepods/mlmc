@@ -4,8 +4,7 @@
 %
 */
 
-//#include "mlmc_test.cpp"     // master MLMC file
-#include "mlmc_test_100.cpp" // master file for 100 tests
+#include "mlmc_test.h"
 #include <random>           // C++11 random number generators
 #include <functional>
 
@@ -42,7 +41,7 @@ int main(int argc, char **argv) {
   normal.reset();
 
   fp = fopen("nested.txt","w");
-  mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
+  complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
   fclose(fp);
   
 //

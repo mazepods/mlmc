@@ -1,51 +1,12 @@
-/*
-
-  mlmc_test(mlmc_l, N,L, N0,Eps,Lmin,Lmax, fp)
-
-  multilevel Monte Carlo test routine
-
-   mlmc_l(l,N,sums)     low-level routine
-
-   inputs:  l = level
-            N = number of paths
-
-   output: sums[0] = sum(cost)
-           sums[1] = sum(Pf-Pc)
-           sums[2] = sum((Pf-Pc).^2)
-           sums[3] = sum((Pf-Pc).^3)
-           sums[4] = sum((Pf-Pc).^4)
-           sums[5] = sum(Pf)
-           sums[6] = sum(Pf.^2)
-
-   N      = number of samples for convergence tests
-   L      = number of levels for convergence tests
-
-   N0     = initial number of samples
-   Eps    = desired accuracy array (terminated by value 0)
-   Lmin   = minimum level of refinement
-   Lmax   = maximum level of refinement
-
-   fp     = file handle for output
-*/
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
 
 #include "mlmc.h"
+#include "mlmc_test.h"
 
-// https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
-// variadic macro to print to both file and stdout
-#define PRINTF2(fp, ...) {printf(__VA_ARGS__);fprintf(fp,__VA_ARGS__);}
+void complexity_test(int N, int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
 
-
-void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
-
-//
-// first, convergence tests
-//
+  //
+  // first, convergence test
+  //
 
   // current date/time based on current system
   time_t now = time(NULL);
@@ -68,6 +29,7 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
   PRINTF2(fp,"-------------------------------------------------------------\n");
 
   double sums[7];
+  float alpha, beta, gamma;
   float *cost = (float *)malloc((L+1)*sizeof(float));
   float *del1 = (float *)malloc((L+1)*sizeof(float));
   float *del2 = (float *)malloc((L+1)*sizeof(float));
@@ -106,9 +68,9 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
     l,del1[l],del2[l],var1[l],var2[l],kur1[l],chk1[l],cost[l]);
   }
 
-//
-// print out a warning if kurtosis or consistency check looks bad
-//
+  //
+  // print out a warning if kurtosis or consistency check looks bad
+  //
 
   if (kur1[L] > 100.0f) {
     PRINTF2(fp,"\n WARNING: kurtosis on finest level = %f \n",kur1[L]);
@@ -124,31 +86,14 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
     PRINTF2(fp," indicates identity E[Pf-Pc] = E[Pf] - E[Pc] not satisfied \n");
   }
 
-//
-// use linear regression to estimate alpha, beta, gamma
-//
+  //
+  // use linear regression to estimate alpha, beta, gamma
+  //
 
-  float alpha, beta, gamma, foo;
-  float *x = (float *)malloc(L*sizeof(float));
-  float *y = (float *)malloc(L*sizeof(float));
-
-  for (int l=1; l<=L; l++) {
-    x[l-1] = l;
-    y[l-1] = - log2f(fabsf(del1[l]));
-  } 
-  regression(L,x,y,alpha,foo);
-
-  for (int l=1; l<=L; l++) {
-    x[l-1] = l;
-    y[l-1] = - log2f(var1[l]);
-  } 
-  regression(L,x,y,beta,foo);
-
-  for (int l=1; l<=L; l++) {
-    x[l-1] = l;
-    y[l-1] = log2f(cost[l]);
-  } 
-  regression(L,x,y,gamma,foo);
+  for(int l=0; l<L; l++) del1[l] = fabsf(del1[l]);
+  alpha = estimate(L,del1,ALPHA);
+  beta  = estimate(L,var1,BETA);
+  gamma = estimate(L,cost,GAMMA);
 
   PRINTF2(fp,"\n******************************************************\n");
   PRINTF2(fp,"*** Linear regression estimates of MLMC parameters ***\n");
@@ -157,9 +102,9 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
   PRINTF2(fp," beta  = %f  (exponent for MLMC variance) \n",beta);
   PRINTF2(fp," gamma = %f  (exponent for MLMC cost) \n",gamma);
 
-//
-// second, mlmc complexity tests
-//
+  //
+  // second, complexity tests
+  //
 
   PRINTF2(fp,"\n");
   PRINTF2(fp,"***************************** \n");
@@ -185,7 +130,7 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
         mlmc_cost += Nl[l]*Cl[l];
         if (l<=L) {
           std_cost = var2[l]*cost[l] / ((1.0f-theta)*eps*eps);
-	}
+        }
         else
           std_cost = var2[L]*Cl[l] / ((1.0f-theta)*eps*eps);
       }
@@ -197,4 +142,44 @@ void mlmc_test(int N,int L, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
     PRINTF2(fp,"\n");
   }
   PRINTF2(fp,"\n");
+}
+
+void mlmc_test_n(float val, int n, int N0, float *Eps, int Lmin, int Lmax, FILE *fp) {
+  // current date/time based on current system
+  time_t now = time(NULL);
+  char *date = ctime(&now);
+  int len = strlen(date);
+  date[len-1] = ' ';
+
+  PRINTF2(fp,"\n");
+  PRINTF2(fp,"**********************************************************\n");
+  PRINTF2(fp,"*** MLMC file version 1.0     produced by              ***\n");
+  PRINTF2(fp,"*** C++ mlmc_test on %s         ***\n",date);
+  PRINTF2(fp,"**********************************************************\n");
+  PRINTF2(fp,"\n");
+  PRINTF2(fp,"***************************************** \n");
+  PRINTF2(fp,"*** MLMC errors from %d calculations *** \n",n);
+  PRINTF2(fp,"***************************************** \n");
+
+  if (isnan(val)) {
+    PRINTF2(fp,"\n Exact value unknown \n");
+  }
+  else {
+    PRINTF2(fp,"\n Exact value: %f \n",val);
+  }
+
+  int   i = 0;
+  int   *Nl = (int *)malloc((Lmax+1)*sizeof(int));
+  float *Cl = (float *)malloc((Lmax+1)*sizeof(float));
+
+  while (Eps[i]>0) {
+    float eps = Eps[i++];
+    PRINTF2(fp,"\n eps = %.3e \n-----------------\n",eps); 
+
+    for(int j=0; j<n; j++) {
+      float P = mlmc(Lmin,Lmax,N0,eps,Nl,Cl);
+      PRINTF2(fp," %.5e ",P);
+      if (j%5==4) PRINTF2(fp,"\n");
+    }
+  }
 }

@@ -9,9 +9,7 @@
 % -- switch to S_0=100
 */
 
-//#include "mlmc_test.cpp"   // master MLMC file
-#include "mlmc_test_100.cpp" // master file for 100 tests
-
+#include "mlmc_test.h"
 #include "mlmc_rng.cpp"      // new file with RNG functions
 
 #include <stdio.h>
@@ -96,8 +94,7 @@ int main(int argc, char **argv) {
       memcpy(Eps,Eps2,sizeof(Eps2));
     }
 
-    mlmc_test(N,L, N0,Eps, Lmin,Lmax, fp);
-
+    complexity_test(N,L,N0,Eps,Lmin,Lmax,fp);
     fclose(fp);
 
     // print out time taken, if using OpenMP
@@ -154,7 +151,7 @@ int main(int argc, char **argv) {
 
     sprintf(filename,"mcqmc06_%d_100.txt",option);
     fp = fopen(filename,"w");
-    mlmc_test_100(val, N0,Eps,Lmin,Lmax, fp);
+    mlmc_test_n(val,100,N0,Eps,Lmin,Lmax,fp);
 
     fclose(fp);
     
