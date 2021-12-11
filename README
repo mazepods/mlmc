@@ -18,9 +18,9 @@
 -[ ] Add a timing implementation to test the different rng available
 
 ### Test Suite & mlmc
--[ ] Test a C structure in place of sums array
--[ ] Change Eps check for a less error-prone solution
--[ ] Offer a set of tests to run diagnostics at the application level
+-[x] Test a C structure in place of sums array
+-[x] Change Eps check for a less error-prone solution
+-[x] Offer a set of tests to run diagnostics at the application level
 
 ### Report, Plots, & Logging
 -[ ] Create a logger.h library to manage all logging calls
@@ -28,11 +28,8 @@
 -[ ] Generate pdfs and tex files dynamically
 -[ ] Port matlab plotting code to C
 
-### Utilities
--[ ] Move regression function to a util.h file
-
 ### Applications
--[ ] Separate poissinv file into a proper header and cpp file
+-[x] Separate poissinv file into a proper header and cpp file
 -[ ] Remove rng embbeded code and use the rng.h instead
 -[ ] Port basket
 -[ ] Add OMP support to the missing applications
