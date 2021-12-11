@@ -17,8 +17,10 @@
 -[ ] Separate each rng implementation into its own file
 -[ ] Add a timing implementation to test the different rng available
 
-### Test Suite
--[ ] 
+### Test Suite & mlmc
+-[ ] Test a C structure in place of sums array
+-[ ] Change Eps check for a less error-prone solution
+-[ ] Offer a set of tests to run diagnostics at the application level
 
 ### Report, Plots, & Logging
 -[ ] Create a logger.h library to manage all logging calls
@@ -32,6 +34,6 @@
 ### Applications
 -[ ] Separate poissinv file into a proper header and cpp file
 -[ ] Remove rng embbeded code and use the rng.h instead
--[ ] Other Matlab applications to port?
--[ ] Add OMP support to the other applicaciones? ctmp runs the slowest
+-[ ] Port basket
+-[ ] Add OMP support to the missing applications
 
