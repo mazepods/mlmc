@@ -44,7 +44,6 @@ double dt(double *q, double beta, int l) {
   double h = pow(0.5,(double) l) * q2*q2 / fmax(2.0*beta,50.0);
   return h;
 }
-
 //
 //------ clamp ---------
 //
@@ -69,6 +68,7 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 10;     // maximum refinement level
  
+  float val = NAN;
   float Eps[] = { 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01 };
   int size_eps = NELEMS(Eps);
   char filename[32];
@@ -97,6 +97,30 @@ int main(int argc, char **argv) {
   // delete generator and storage
 #pragma omp parallel
   rng_termination();
+
+  //
+  // 100 MLMC calcs
+  //
+
+#pragma omp parallel
+  rng_initialisation();
+
+  sprintf(filename, "adapted_100.txt");
+  fp = fopen(filename,"w");
+  mlmc_test_n(val,100,N0,Eps,size_eps,Lmin,Lmax,fp);
+
+  fclose(fp);
+
+    // print out time taken, if using OpenMP
+#ifdef _OPENMP
+    printf(" execution time = %f s\n",omp_get_wtime() - wtime);
+    wtime = omp_get_wtime();
+#endif
+
+    // delete generator and storage
+#pragma omp parallel
+    rng_termination();
+
 }
   
 
