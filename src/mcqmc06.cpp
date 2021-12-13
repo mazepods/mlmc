@@ -10,7 +10,9 @@
 */
 
 #include "mlmc_test.h"
-#include "mlmc_rng.cpp"      // new file with RNG functions
+#include "rng.h"
+
+#include <omp.h>
 
 #include <stdio.h>
 #include <stdlib.h>

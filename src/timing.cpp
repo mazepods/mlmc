@@ -4,7 +4,7 @@ RNG performance test
 
 */
 
-#include "mlmc_rng.cpp"
+#include "rng.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

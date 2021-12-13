@@ -5,14 +5,7 @@
 */
 
 #include "mlmc_test.h"
-#include <random>           // C++11 random number generators
-#include <functional>
-
-// declare generator and output distribution
-
-std::default_random_engine rng;
-std::normal_distribution<float> normal(0.0f,1.0f);
-auto next_normal = std::bind(std::ref(normal), std::ref(rng));
+#include "rng.h"
 
 //
 // main code
@@ -36,12 +29,13 @@ int main(int argc, char **argv) {
 // main MLMC calculation
 // 
 
-  rng.seed(1234);
-  normal.reset();
+  rng_initialisation();
 
   fp = fopen("nested.txt","w");
   complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
   fclose(fp);
+
+  rng_termination();
   
 //
 // now do 100 MLMC calcs in parallel

@@ -3,22 +3,9 @@
 % model stochastic reaction testcase from paper by Anderson and Higham
 %
 */
-
-#include <random>           // C++11 random number generators
-#include <functional>
-
+#include "rng.h"
 #include "mlmc_test.h"
 #include "poissinv.h"
-
-// declare generator and output distribution
-
-std::default_random_engine rng;
-std::uniform_real_distribution<float> uniform(0.0f,1.0f);
-auto next_uniform = std::bind(std::ref(uniform), std::ref(rng));
-
-//
-// main code
-//
 
 int main(int argc, char **argv) {
   
@@ -38,13 +25,14 @@ int main(int argc, char **argv) {
 // main MLMC calculation
 // 
 
-  rng.seed(1234);
-  uniform.reset();
+  rng_initialisation();
 
   fp = fopen("ctmp.txt","w");
   complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
   fclose(fp);
   
+  rng_termination();
+
 //
 // now do 100 MLMC calcs in parallel
 //

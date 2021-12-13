@@ -8,7 +8,9 @@
 */
 
 #include "mlmc_test.h"  // master MLMC file
-#include "mlmc_rng.cpp"   // new file with RNG functions
+#include "rng.h"
+
+#include <omp.h>
 
 #include <stdio.h>
 #include <stdlib.h>

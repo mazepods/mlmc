@@ -46,29 +46,35 @@ $(OBJDIR)/st/%.o: %.cpp
 $(OBJDIR)/mt/%.o: %.cpp
 	$(CCOMP) $(COMPFLAGS) -c $< -o $@ $(INC) $(LIB)
 
-mcqmc06: $(OBJDIR)/st/mcqmc06.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+mcqmc06: $(OBJDIR)/st/mcqmc06.o $(STOBJS) rng.h
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 mcqmc06_omp: $(OBJDIR)/mt/mcqmc06.o $(MTOBJS)
-	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 ctmp: $(OBJDIR)/st/ctmp.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $(OBJDIR)/st/poissinv.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/poissinv.o $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 nested: $(OBJDIR)/st/nested.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 adapted: $(OBJDIR)/st/adapted.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
+adapted_omp: $(OBJDIR)/mt/adapted.o $(MTOBJS)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 reflected: $(OBJDIR)/st/reflected.o $(STOBJS)
-	$(CC) $(CFLAGS) $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
+reflected_omp: $(OBJDIR)/mt/reflected.o $(MTOBJS)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 timing: $(OBJDIR)/st/timing.o $(STOBJS)
-	$(CC) $(CFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 timing_omp: $(OBJDIR)/mt/timing_omp.o $(MTOBJS)
-	$(CCOMP) $(COMPFLAGS) $< -o $(BINDIR)/$@ $(INC) $(LIB)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 clean:
 	$(RM) -rf $(BINDIR)/* $(OBJDIR)/*

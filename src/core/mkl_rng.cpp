@@ -1,43 +1,7 @@
-
-//----- C++11 random number generation when not using OpenMP -------------
-
-#ifndef _OPENMP
-
-#include <random>           // C++11 random number generators
-#include <functional>
-
-/* some web references
-
-   https://www.cplusplus.com/reference/random/
-   https://stackoverflow.com/questions/14023880/c11-random-numbers-and-stdbind-interact-in-unexpected-way/14023935
-   https://stackoverflow.com/questions/20671573/c11-stdgenerate-and-stduniform-real-distribution-called-two-times-gives-st
-
-*/
-
-// declare generator and output distributions
-
-std::default_random_engine rng;
-std::uniform_real_distribution<float> uniform(0.0f,1.0f);
-std::normal_distribution<float> normal(0.0f,1.0f);
-std::exponential_distribution<float> exponential(1.0f);
-
-auto next_uniform     = std::bind(std::ref(uniform),     std::ref(rng));
-auto next_normal      = std::bind(std::ref(normal),      std::ref(rng));
-auto next_exponential = std::bind(std::ref(exponential), std::ref(rng));
-
-void rng_initialisation() {
-    rng.seed(1234);
-    uniform.reset();
-    normal.reset();
-    exponential.reset();
-}
-
-void rng_termination() {
-}
-
+#include "rng.h"
 //------- MKL/VSL random number generation when using OpenMP -----------
 
-#else
+#ifdef _OPENMP
 
 #include <mkl.h>
 #include <mkl_vsl.h>
@@ -106,4 +70,3 @@ float next_exponential(){
 
 #endif
 
-//----------------------------------------------------------------------
