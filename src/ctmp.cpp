@@ -3,9 +3,12 @@
 % model stochastic reaction testcase from paper by Anderson and Higham
 %
 */
+
 #include "rng.h"
 #include "mlmc_test.h"
 #include "poissinv.h"
+
+#include <omp.h>
 
 int main(int argc, char **argv) {
   
@@ -24,13 +27,24 @@ int main(int argc, char **argv) {
 //
 // main MLMC calculation
 // 
+#ifdef _OPENMP
+  double wtime = omp_get_wtime();
+#endif
 
+#pragma omp parallel
   rng_initialisation();
 
   fp = fopen("ctmp.txt","w");
+
   complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
   fclose(fp);
+
+#ifdef _OPENMP
+  printf(" execution time = %f s\n",omp_get_wtime() - wtime);
+  wtime = omp_get_wtime();
+#endif
   
+#pragma omp parallel
   rng_termination();
 
 //
@@ -63,7 +77,6 @@ void propensity(float *q, float *lam){
 
 void mlmc_l(int l, int N, double *sums) {
 
-  float u, p1, p2;
   int   n_states=3, n_reactions=5;
   float nu[3][5] = { { 1,  0,  0, -1,  0 },  // stoichiometric matrix
                      { 0,  1, -2,  0, -1 },
@@ -76,27 +89,28 @@ void mlmc_l(int l, int N, double *sums) {
   int nc = nf/M;
 
   float hf = 1.0/((float) nf);
-  float hc = 1.0/((float) nc);
+  //float hc = 1.0/((float) nc);
   
+#pragma omp parallel for reduction(+:sums[0:7])
   for (int nn=0; nn<N; nn++) {
 
+    float u, p1, p2;
     float qf[] = {0.0, 0.0, 0.0};
     float qc[] = {0.0, 0.0, 0.0};
 
     float lamf[5], lamc[5];
-    
     // level 0
 
     if (l==0) {
       for (int n=0; n<nf; n++) {
-	propensity(qf,lamf);
-	for (int r=0; r<n_reactions; r++) {
-	  u  = next_uniform();
+      	propensity(qf,lamf);
+	      for (int r=0; r<n_reactions; r++) {
+	        u  = next_uniform();
           p1 = poissinv(u,hf*lamf[r]);
-	  for (int s=0; s<n_states; s++) {
+	        for (int s=0; s<n_states; s++) {
             qf[s] = qf[s] + p1*nu[s][r];
-	  }
-	}
+	        }
+	      }
         for (int s=0; s<n_states; s++) qf[s] = fmaxf(0.0f,qf[s]);
       }
     }
@@ -104,29 +118,27 @@ void mlmc_l(int l, int N, double *sums) {
     // level l>0
     else {
       for (int n=0; n<nc; n++) {
-	propensity(qc,lamc);
-	
+	      propensity(qc,lamc);
         for (int m=0; m<M; m++) {
           propensity(qf,lamf);
-	  for (int r=0; r<n_reactions; r++) {
+	        for (int r=0; r<n_reactions; r++) {
             u  = next_uniform();
             p1 = poissinv(u,hf*fminf(lamf[r],lamc[r]));
-	    u  = next_uniform();
+	          u  = next_uniform();
             p2 = poissinv(u,hf*fabsf(lamf[r]-lamc[r]));
-
             for (int s=0; s<n_states; s++) {
-	      if (lamf[r]<lamc[r]) {
+	            if (lamf[r]<lamc[r]) {
                 qf[s] = qf[s] +  p1    *nu[s][r];
                 qc[s] = qc[s] + (p1+p2)*nu[s][r];
-	      }
-	      else {
+	            }
+	            else {
                 qf[s] = qf[s] + (p1+p2)*nu[s][r];
                 qc[s] = qc[s] +  p1    *nu[s][r];
-	      }
+	            }
             }
-	  }
+	        }
           for (int s=0; s<n_states; s++) qf[s] = fmaxf(0.0f,qf[s]);
-	}
+	      }
         for (int s=0; s<n_states; s++) qc[s] = fmaxf(0.0f,qc[s]);
       }
     }

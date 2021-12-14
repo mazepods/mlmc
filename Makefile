@@ -55,6 +55,9 @@ mcqmc06_omp: $(OBJDIR)/mt/mcqmc06.o $(MTOBJS)
 ctmp: $(OBJDIR)/st/ctmp.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/poissinv.o $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
+ctmp_omp: $(OBJDIR)/mt/ctmp.o $(MTOBJS)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/poissinv.o $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
 nested: $(OBJDIR)/st/nested.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
