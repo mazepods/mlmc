@@ -45,9 +45,9 @@ float next_uniform(){
   if (uniforms_count==0) {
     vsRngUniform(VSL_RNG_METHOD_UNIFORM_STD,
                   stream,NRV,uniforms,0.0f,1.0f);
-    normals_count = NRV;
+    uniforms_count = NRV;
   }
-  return normals[--normals_count];
+  return uniforms[--uniforms_count];
 }
 
 float next_normal(){
