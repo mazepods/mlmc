@@ -22,10 +22,12 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 20;     // maximum refinement level
  
+  float val = NAN;
   float Eps[] = { 0.0001, 0.0002, 0.0005, 0.001, 0.002 };
   int size_eps = NELEMS(Eps);
 
   FILE *fp;
+  char filename[32];
 
 //
 // main MLMC calculation
@@ -37,7 +39,8 @@ int main(int argc, char **argv) {
 #pragma omp parallel
   rng_initialisation();
 
-  fp = fopen("nested.txt","w");
+  sprintf(filename, "nested.txt");
+  fp = fopen(filename,"w");
 
   complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
 
@@ -53,13 +56,23 @@ int main(int argc, char **argv) {
 //
 // now do 100 MLMC calcs in parallel
 //
+#pragma omp parallel
+  rng_initialisation();
 
-  /*
-  float val = 0.0;
-  fp = fopen("nested_100.txt","w");
-  mlmc_test_100(mcqmc06_l, val, N0,Eps,Lmin,Lmax, fp);
+  sprintf(filename, "nested_100.txt");
+  fp = fopen(filename,"w");
+  mlmc_test_n(val,100,N0,Eps,size_eps,Lmin,Lmax,fp);
+
   fclose(fp);
-  */
+
+#ifdef _OPENMP
+    printf(" execution time = %f s\n",omp_get_wtime() - wtime);
+    wtime = omp_get_wtime();
+#endif
+
+#pragma omp parallel
+    rng_termination();
+
 }
 
 
