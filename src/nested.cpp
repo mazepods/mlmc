@@ -7,6 +7,8 @@
 #include "mlmc_test.h"
 #include "rng.h"
 
+#include <omp.h>
+
 //
 // main code
 //
@@ -28,13 +30,24 @@ int main(int argc, char **argv) {
 //
 // main MLMC calculation
 // 
+#ifdef _OPENMP
+  double wtime = omp_get_wtime();
+#endif
 
+#pragma omp parallel
   rng_initialisation();
 
   fp = fopen("nested.txt","w");
+
   complexity_test(N,L,N0,Eps,size_eps,Lmin,Lmax,fp);
+
   fclose(fp);
 
+#ifdef _OPENMP
+  printf(" execution time = %f s\n",omp_get_wtime() - wtime);
+#endif
+
+#pragma omp parallel
   rng_termination();
   
 //
@@ -66,6 +79,7 @@ void mlmc_l(int l, int N, double *sums) {
   int nf = 1<<l;
   int nc = nf/2;
 
+#pragma omp parallel for shared(nf,nc) reduction(+:sums[0:7])
   for (int nn=0; nn<N; nn++) {
 
     // level 0

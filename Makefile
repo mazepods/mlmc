@@ -58,6 +58,9 @@ ctmp: $(OBJDIR)/st/ctmp.o $(STOBJS)
 nested: $(OBJDIR)/st/nested.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
+nested_omp: $(OBJDIR)/mt/nested.o $(MTOBJS)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
 adapted: $(OBJDIR)/st/adapted.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
