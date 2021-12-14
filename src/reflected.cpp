@@ -69,6 +69,7 @@ int main(int argc, char **argv) {
   int Lmin = 2;      // minimum refinement level
   int Lmax = 12;     // maximum refinement level
  
+  float val = NAN;
   float Eps[] = { 0.0002, 0.0005, 0.001, 0.002, 0.005 };
   int size_eps = NELEMS(Eps);
   char filename[32];
@@ -105,6 +106,28 @@ int main(int argc, char **argv) {
 
     fclose(fp);
     
+    // print out time taken
+#ifdef _OPENMP
+    printf(" execution time = %f s\n",omp_get_wtime() - wtime);
+#endif
+
+    // delete generator and storage
+#pragma omp parallel
+    rng_termination();
+
+    //
+    // 100 MLMC calcs
+    //
+#pragma omp parallel
+    rng_initialisation();
+
+    sprintf(filename,"reflected_%d_100.txt",option);
+    fp = fopen(filename,"w");
+
+    mlmc_test_n(val,100,N0,Eps,size_eps,Lmin,Lmax,fp);
+
+    fclose(fp);
+
     // print out time taken
 #ifdef _OPENMP
     printf(" execution time = %f s\n",omp_get_wtime() - wtime);
