@@ -13,14 +13,15 @@
 -[ ] Will we be open to contributions? Add a contributing file
 
 ### Random Numbers Generator
--[ ] Create a header file rng.h
--[ ] Separate each rng implementation into its own file
+-[x] Create a header file rng.h
+-[x] Separate each rng implementation into its own file
 -[ ] Add a timing implementation to test the different rng available
 
 ### Test Suite & mlmc
 -[x] Test a C structure in place of sums array
 -[x] Change Eps check for a less error-prone solution
 -[x] Offer a set of tests to run diagnostics at the application level
+-[ ] Add weak error check using last 3 levels
 
 ### Report, Plots, & Logging
 -[ ] Create a logger.h library to manage all logging calls
@@ -30,7 +31,7 @@
 
 ### Applications
 -[x] Separate poissinv file into a proper header and cpp file
--[ ] Remove rng embbeded code and use the rng.h instead
+-[x] Remove rng embbeded code and use the rng.h instead
 -[ ] Port basket
--[ ] Add OMP support to the missing applications
+-[x] Add OMP support to the missing applications
 
