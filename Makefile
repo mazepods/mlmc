@@ -46,7 +46,7 @@ $(OBJDIR)/st/%.o: %.cpp
 $(OBJDIR)/mt/%.o: %.cpp
 	$(CCOMP) $(COMPFLAGS) -c $< -o $@ $(INC) $(LIB)
 
-mcqmc06: $(OBJDIR)/st/mcqmc06.o $(STOBJS) rng.h
+mcqmc06: $(OBJDIR)/st/mcqmc06.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 mcqmc06_omp: $(OBJDIR)/mt/mcqmc06.o $(MTOBJS)
@@ -74,6 +74,12 @@ reflected: $(OBJDIR)/st/reflected.o $(STOBJS)
 	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 reflected_omp: $(OBJDIR)/mt/reflected.o $(MTOBJS)
+	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
+fk1: $(OBJDIR)/st/fk1.o $(STOBJS)
+	$(CC) $(CFLAGS) $(OBJDIR)/st/random_rng.o $(OBJDIR)/st/mlmc.o $(OBJDIR)/st/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
+
+fk1_omp: $(OBJDIR)/mt/fk1.o $(MTOBJS)
 	$(CCOMP) $(COMPFLAGS) $(OBJDIR)/mt/mkl_rng.o $(OBJDIR)/mt/mlmc.o $(OBJDIR)/mt/mlmc_test.o $< -o $(BINDIR)/$@ $(INC) $(LIB)
 
 timing: $(OBJDIR)/st/timing.o $(STOBJS)
